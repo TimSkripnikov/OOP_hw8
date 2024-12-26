@@ -1,183 +1,127 @@
 #include <iostream>
+#include <string>
 
 class GenericCreature
 {
 public:
-    GenericCreature(const std::string &name) : name(name)
+    GenericCreature()
     {
-        std::cout << "Init construct GenericCreature: " << name << std::endl;
+        std::cout << "GenerecCreature constructor was called!" << std::endl;
     }
     ~GenericCreature()
     {
-        std::cout << "Destructor GenericCreature: " << name << std::endl;
+        std::cout << "GenericCreature destructor was called!" << std::endl;
     }
-    void exist() const
+
+    void live()
     {
-        std::cout << name << " exists as a generic creature." << std::endl;
+        std::cout << "I can live!" << std::endl;
     }
-
-protected:
-    std::string getName() const { return name; }
-
-private:
-    std::string name;
 };
 
 class OceanCreature : public GenericCreature
 {
 public:
-    OceanCreature(const std::string &name, bool canSwim)
-        : GenericCreature(name), canSwim(canSwim)
+    OceanCreature()
     {
-        std::cout << "Init construct OceanCreature: " << getName() << std::endl;
+        std::cout << "OceanCreature constructor was called!" << std::endl;
     }
     ~OceanCreature()
     {
-        std::cout << "Destructor OceanCreature: " << getName() << std::endl;
+        std::cout << "OceanCreature destructor was called!" << std::endl;
     }
-    void swim() const
+    void swim()
     {
-        if (canSwim)
-            std::cout << getName() << " can swim in the ocean." << std::endl;
-        else
-            std::cout << getName() << " cannot swim." << std::endl;
+        std::cout << "I can swim!" << std::endl;
     }
-
-private:
-    bool canSwim;
 };
 
-class Amphibious : public OceanCreature
+class AmphibiousCreature : public OceanCreature
 {
 public:
-    Amphibious(const std::string &name, bool canSwim, bool canWalk)
-        : OceanCreature(name, canSwim), canWalk(canWalk)
+    AmphibiousCreature()
     {
-        std::cout << "Init construct Amphibious: " << getName() << std::endl;
+        std::cout << "AmphibiousCreature constructor called!" << std::endl;
     }
-    ~Amphibious()
+    ~AmphibiousCreature()
     {
-        std::cout << "Destructor Amphibious: " << getName() << std::endl;
+        std::cout << "AmphibiousCreature destructor called!" << std::endl;
     }
-    void walk() const
+    void walk()
     {
-        if (canWalk)
-            std::cout << getName() << " can walk on land." << std::endl;
-        else
-            std::cout << getName() << " cannot walk." << std::endl;
+        std::cout << "I can walk!" << std::endl;
     }
-
-private:
-    bool canWalk;
 };
 
-class TerrestrialCreature : public Amphibious
+class TerrestrialCreature : protected AmphibiousCreature
 {
 public:
-    TerrestrialCreature(const std::string &name, bool canSwim, bool canWalk, bool walksOnTwoLegs)
-        : Amphibious(name, canSwim, canWalk), walksOnTwoLegs(walksOnTwoLegs)
+    TerrestrialCreature()
     {
-        std::cout << "Init construct TerrestrialCreature: " << getName() << std::endl;
+        std::cout << "TerrestrialCreature constructor was called!" << std::endl;
     }
+
     ~TerrestrialCreature()
     {
-        std::cout << "Destructor TerrestrialCreature: " << getName() << std::endl;
+        std::cout << "TerrestrialCreature destructor was called!" << std::endl;
     }
-    void walkOnTwoLegs() const
-    {
-        if (walksOnTwoLegs)
-            std::cout << getName() << " walks on two legs." << std::endl;
-        else
-            std::cout << getName() << " does not walk on two legs." << std::endl;
-    }
-
-private:
-    bool walksOnTwoLegs;
+    using AmphibiousCreature::walk;
 };
 
 class Bird : public TerrestrialCreature
 {
 public:
-    Bird(const std::string &name, bool canSwim, bool canWalk, bool walksOnTwoLegs, bool canFly)
-        : TerrestrialCreature(name, canSwim, canWalk, walksOnTwoLegs), canFly(canFly)
+    Bird()
     {
-        std::cout << "Init construct Bird: " << getName() << std::endl;
+        std::cout << "Bird constructor was called!" << std::endl;
     }
     ~Bird()
     {
-        std::cout << "Destructor Bird: " << getName() << std::endl;
+        std::cout << "Bird destructor was called!" << std::endl;
     }
-    void fly() const
+    void fly()
     {
-        if (canFly)
-            std::cout << getName() << " can fly in the sky." << std::endl;
-        else
-            std::cout << getName() << " cannot fly." << std::endl;
+        std::cout << "I can fly!" << std::endl;
     }
-
-private:
-    bool canFly;
 };
 
 class Waterfowl : public Bird
 {
 public:
-    Waterfowl(const std::string &name, bool canSwim, bool canWalk, bool walksOnTwoLegs, bool canFly)
-        : Bird(name, canSwim, canWalk, walksOnTwoLegs, canFly)
+    Waterfowl()
     {
-        std::cout << "Init construct Waterfowl: " << getName() << std::endl;
+        std::cout << "Waterfowl constructor called!" << std::endl;
     }
     ~Waterfowl()
     {
-        std::cout << "Destructor Waterfowl: " << getName() << std::endl;
+        std::cout << "Waterfowl destructor called!" << std::endl;
     }
-    void swim() const
-    {
-        std::cout << getName() << " swims gracefully like a waterfowl." << std::endl;
-    }
+    using OceanCreature::swim;
 };
 
 int main()
 {
-    std::cout << "===================================================" << std::endl;
-    GenericCreature multicell("Creature");
-    std::cout << "---------------------------------------------------" << std::endl;
-    multicell.exist();
-    std::cout << "===================================================" << std::endl;
-    OceanCreature ocean("Fish", true);
-    std::cout << "---------------------------------------------------" << std::endl;
-    ocean.exist();
-    ocean.swim();
-    std::cout << "===================================================" << std::endl;
-    Amphibious amphibious("Frog", true, true);
-    std::cout << "---------------------------------------------------" << std::endl;
-    amphibious.exist();
-    amphibious.swim();
-    amphibious.walk();
-    std::cout << "===================================================" << std::endl;
-    TerrestrialCreature terrestrial("Human", false, true, true);
-    std::cout << "---------------------------------------------------" << std::endl;
-    terrestrial.exist();
-    terrestrial.swim();
-    terrestrial.walk();
-    terrestrial.walkOnTwoLegs();
-    std::cout << "===================================================" << std::endl;
-    Bird bird("Eagle", false, true, true, true);
-    std::cout << "---------------------------------------------------" << std::endl;
-    bird.exist();
-    bird.swim();
-    bird.walk();
-    bird.walkOnTwoLegs();
-    bird.fly();
-    std::cout << "===================================================" << std::endl;
-    Waterfowl duck("Duck", true, true, true, true);
-    std::cout << "---------------------------------------------------" << std::endl;
-    duck.exist();
+    std::cout << "----------------------------------------------" << std::endl;
+    GenericCreature one_cell;
+    std::cout << "----------------------------------------------" << std::endl;
+    OceanCreature fish;
+    fish.swim();
+    std::cout << "----------------------------------------------" << std::endl;
+    AmphibiousCreature frog;
+    frog.swim();
+    frog.walk();
+    std::cout << "----------------------------------------------" << std::endl;
+    TerrestrialCreature some;
+    some.walk();
+    std::cout << "----------------------------------------------" << std::endl;
+    Bird parrot;
+    parrot.walk();
+    parrot.fly();
+    std::cout << "----------------------------------------------" << std::endl;
+    Waterfowl duck;
+    duck.fly();
     duck.swim();
     duck.walk();
-    duck.walkOnTwoLegs();
-    duck.fly();
-    std::cout << "===================================================" << std::endl;
-
+    std::cout << "----------------------------------------------" << std::endl;
     return 0;
 }
